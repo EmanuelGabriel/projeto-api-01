@@ -10,7 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
-import br.com.emanuelgabriel.projeto01.domain.dto.request.CardoModelRequest;
+import br.com.emanuelgabriel.projeto01.domain.dto.request.CargoModelRequest;
 import br.com.emanuelgabriel.projeto01.domain.dto.response.CargoModelResponse;
 import br.com.emanuelgabriel.projeto01.domain.entity.Cargo;
 
@@ -34,7 +34,7 @@ public class CargoMapper {
 		return this.modelMapper.map(dto, Cargo.class);
 	}
 
-	public Cargo dtoToEntity(CardoModelRequest dto) {
+	public Cargo dtoToEntity(CargoModelRequest dto) {
 		return this.modelMapper.map(dto, Cargo.class);
 	}
 

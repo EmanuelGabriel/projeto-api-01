@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
+import br.com.emanuelgabriel.projeto01.domain.dto.request.FuncionarioModelRequest;
 import br.com.emanuelgabriel.projeto01.domain.dto.response.FuncionarioModelResponse;
 import br.com.emanuelgabriel.projeto01.domain.entity.Funcionario;
 
@@ -37,6 +38,10 @@ public class FuncionarioMapper {
 	 */
 	public Funcionario dtoToEntity(FuncionarioModelResponse dto) {
 		return this.modelMapper.map(dto, Funcionario.class);
+	}
+
+	public Funcionario dtoToEntity(FuncionarioModelRequest request) {
+		return this.modelMapper.map(request, Funcionario.class);
 	}
 
 	/**

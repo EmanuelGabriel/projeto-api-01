@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import br.com.emanuelgabriel.projeto01.domain.dto.request.CardoModelRequest;
+import br.com.emanuelgabriel.projeto01.domain.dto.request.CargoModelRequest;
 import br.com.emanuelgabriel.projeto01.domain.dto.response.CargoModelResponse;
 import br.com.emanuelgabriel.projeto01.services.CargoService;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class CargoController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public ResponseEntity<CargoModelResponse> criar(@RequestBody CardoModelRequest request) {
+	public ResponseEntity<CargoModelResponse> criar(@RequestBody CargoModelRequest request) {
 		log.info("POST /cargos {}", request);
 		CargoModelResponse response = this.cargoService.salvar(request);
 		URI location = getUri(response.getId());

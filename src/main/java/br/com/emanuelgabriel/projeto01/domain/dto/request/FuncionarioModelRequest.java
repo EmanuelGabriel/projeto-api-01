@@ -1,4 +1,4 @@
-package br.com.emanuelgabriel.projeto01.domain.dto.response;
+package br.com.emanuelgabriel.projeto01.domain.dto.request;
 
 import java.time.LocalDate;
 
@@ -11,17 +11,12 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FuncionarioModelResponse {
+public class FuncionarioModelRequest {
 
-	private Long id;
 	private String nome;
 	private String cpf;
 	private Double salario;
-	private CargoModelResponse cargo;
-
+	private CargoModelInputRequest cargo;
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataContratacao;
-
-	// private List<UnidadeTrabalho> unidadeTrabalhos;
-
 }

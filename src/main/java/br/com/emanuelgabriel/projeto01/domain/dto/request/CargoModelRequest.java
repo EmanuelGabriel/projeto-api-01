@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CardoModelRequest {
+public class CargoModelRequest {
 
 	private String descricao;
 

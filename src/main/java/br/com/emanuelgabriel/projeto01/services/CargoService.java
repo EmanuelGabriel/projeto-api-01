@@ -5,7 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import br.com.emanuelgabriel.projeto01.domain.dto.request.CardoModelRequest;
+import br.com.emanuelgabriel.projeto01.domain.dto.request.CargoModelRequest;
 import br.com.emanuelgabriel.projeto01.domain.dto.response.CargoModelResponse;
 import br.com.emanuelgabriel.projeto01.domain.entity.Cargo;
 import br.com.emanuelgabriel.projeto01.domain.mapper.CargoMapper;
@@ -30,7 +30,7 @@ public class CargoService {
 		return cargoMapper.mapEntityPageToDTO(pageable, cargos);	
 	}
 
-	public CargoModelResponse salvar(CardoModelRequest request) {
+	public CargoModelResponse salvar(CargoModelRequest request) {
 		log.info("Salvar cargo {}", request);
 		Cargo descricaoExistente = cargoRepository.findByDescricao(request.getDescricao());
 
