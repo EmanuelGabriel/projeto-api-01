@@ -39,7 +39,7 @@ public class CargoController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<CargoModelResponse>> getAll(Pageable pageable) {
+	public ResponseEntity<Page<CargoModelResponse>> buscarTodos(Pageable pageable) {
 		log.info("GET /cargos {}", pageable);
 		Page<CargoModelResponse> cargos = cargoService.buscarTodos(pageable);
 		return cargos != null ? ResponseEntity.ok().body(cargos) : ResponseEntity.ok().build();

@@ -35,7 +35,7 @@ public class CargoService {
 		Cargo descricaoExistente = cargoRepository.findByDescricao(request.getDescricao());
 
 		if (descricaoExistente != null && !descricaoExistente.equals(request)) {
-			throw new RegraNegocioException("Já existe um cargo registrado com este nome");
+			throw new RegraNegocioException("Já existe cargo registrado com este nome");
 		}
 
 		Cargo cargo = cargoMapper.dtoToEntity(request);
