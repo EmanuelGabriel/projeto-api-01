@@ -17,6 +17,8 @@ public class FuncionarioModelRequest {
 	private String cpf;
 	private Double salario;
 	private CargoModelInputRequest cargo;
+
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataContratacao;
+
 }

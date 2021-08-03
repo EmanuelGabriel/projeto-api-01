@@ -71,7 +71,7 @@ public class FuncionarioService {
 		log.info("Busca funcionário por seu cargo {}", nomeCargo);
 		List<Funcionario> porCargo = funcionarioRepository.buscarPorCargo(nomeCargo);
 		if (porCargo.isEmpty()) {
-			throw new ObjNaoEncontradoException("Não há Funcionários para este cargo");
+			throw new ObjNaoEncontradoException("Não há funcionários para este cargo");
 		}
 		return funcionarioMapper.listEntityToDTO(porCargo);
 	}
@@ -82,7 +82,7 @@ public class FuncionarioService {
 		List<Funcionario> buscarPor = funcionarioRepository.buscarPorNomeSalarioMaiorDataContratacao(nome, salario,
 				dataContratacao);
 		if (buscarPor.isEmpty()) {
-			throw new ObjNaoEncontradoException("Funcionários não encontrado");
+			throw new ObjNaoEncontradoException("Não há funcionários para esta busca");
 		}
 		return funcionarioMapper.listEntityToDTO(buscarPor);
 	}

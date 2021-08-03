@@ -22,6 +22,8 @@ public class FuncionarioModelResponse {
 	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate dataContratacao;
 
+	private FotoModelResponse foto;
+
 	// private List<UnidadeTrabalho> unidadeTrabalhos;
 
 }
