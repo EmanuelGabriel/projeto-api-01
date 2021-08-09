@@ -39,6 +39,14 @@ public class FuncionarioController {
 		FuncionarioModelResponse funcionario = funcionarioService.buscarPorId(id);
 		return funcionario != null ? ResponseEntity.ok().body(funcionario) : ResponseEntity.notFound().build();
 	}
+	
+
+	@GetMapping(value = "{cpf}/cpf")
+	public ResponseEntity<FuncionarioModelResponse> buscarPoCPF(@PathVariable String cpf) {
+		log.info("GET /funcionarios/{}/cpf", cpf);
+		FuncionarioModelResponse funcionario = funcionarioService.buscarPorCPF(cpf);
+		return funcionario != null ? ResponseEntity.ok().body(funcionario) : ResponseEntity.notFound().build();
+	}
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
@@ -68,6 +76,23 @@ public class FuncionarioController {
 	public ResponseEntity<List<FuncionarioModelResponse>> buscarPor(@RequestParam(value = "nomeCargo") String nomeCargo) {
 		log.info("GET /funcionarios/por-cargo {}", nomeCargo);
 		List<FuncionarioModelResponse> funcionarios = funcionarioService.buscarPorCargo(nomeCargo);
+		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "data-contratacao", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<FuncionarioModelResponse>> buscarPorDataContratacao(
+			@RequestParam(value = "dataContratacao") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataContratacao) {
+		log.info("GET /funcionarios/data-contratacao {}", dataContratacao);
+		List<FuncionarioModelResponse> funcionarios = funcionarioService.buscarPorDataContratacao(dataContratacao);
+		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "periodo-data-contratacao", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<FuncionarioModelResponse>> buscarPorPeriodoDataContratacao(
+			@RequestParam(value = "dataInicial") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicial, 
+			@RequestParam(value = "dataFinal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal) {
+		log.info("GET /funcionarios/periodo-data-contratacao {} a {}", dataInicial, dataFinal);
+		List<FuncionarioModelResponse> funcionarios = funcionarioService.buscarPorPeriodoDataContratacao(dataInicial, dataFinal);
 		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
 	}
 

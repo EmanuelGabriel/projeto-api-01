@@ -13,7 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Fetch;
@@ -57,7 +56,7 @@ public class Funcionario {
 			@JoinColumn(name = "fk_funcionario") }, inverseJoinColumns = { @JoinColumn(name = "fk_unidade") })
 	private List<UnidadeTrabalho> unidadeTrabalhos;
 
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "foto_id")
 	private Foto foto;
 

@@ -45,6 +45,16 @@ public class FuncionarioService {
 
 	}
 
+	public FuncionarioModelResponse buscarPorCPF(String cpf) {
+		log.info("Busca funcionário por CPF {}", cpf);
+		Funcionario funcionario = funcionarioRepository.findByCpf(cpf);
+		if (funcionario == null) {
+			throw new ObjNaoEncontradoException("Funcionário de CPF não encontrado");
+		}
+		return this.funcionarioMapper.entityToDTO(funcionario);
+
+	}
+
 	public FuncionarioModelResponse salvar(FuncionarioModelRequest request) {
 		log.info("Cria um funcionário {}", request);
 		Funcionario funcionarioExistente = funcionarioRepository.findByCpf(request.getCpf());
@@ -85,6 +95,26 @@ public class FuncionarioService {
 			throw new ObjNaoEncontradoException("Não há funcionários para esta busca");
 		}
 		return funcionarioMapper.listEntityToDTO(buscarPor);
+	}
+
+	public List<FuncionarioModelResponse> buscarPorDataContratacao(LocalDate dataContratacao) {
+		log.info("Busca funcionário por sua data de contratação {}", dataContratacao);
+		List<Funcionario> funcionarios = funcionarioRepository.buscarPorDataContratacao(dataContratacao);
+		if (funcionarios.isEmpty()) {
+			throw new ObjNaoEncontradoException("Não foi encontrado funcionário nesta data de contratação");
+		}
+
+		return funcionarioMapper.listEntityToDTO(funcionarios);
+	}
+	
+	public List<FuncionarioModelResponse> buscarPorPeriodoDataContratacao(LocalDate dataInicio, LocalDate dataFinal) {
+		log.info("Busca funcionário por período de data de contratação inicial {} e final {}", dataInicio, dataFinal);
+		List<Funcionario> funcionarios = funcionarioRepository.findByDataContratacaoBetween(dataInicio, dataFinal);
+		if (funcionarios.isEmpty()) {
+			throw new ObjNaoEncontradoException("Não foi encontrado funcionários contratados neste período");
+		}
+
+		return funcionarioMapper.listEntityToDTO(funcionarios);
 	}
 
 }

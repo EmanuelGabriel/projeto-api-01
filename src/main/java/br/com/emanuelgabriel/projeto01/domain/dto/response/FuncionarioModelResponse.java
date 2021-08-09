@@ -1,9 +1,11 @@
 package br.com.emanuelgabriel.projeto01.domain.dto.response;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import br.com.emanuelgabriel.projeto01.domain.entity.UnidadeTrabalho;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +26,6 @@ public class FuncionarioModelResponse {
 
 	private FotoModelResponse foto;
 
-	// private List<UnidadeTrabalho> unidadeTrabalhos;
+	private List<UnidadeTrabalho> unidadeTrabalhos;
 
 }
