@@ -55,4 +55,10 @@ public class PedidoOracaoService {
 		Page<Pedido> pedidos = pedidoOracaoRepository.findAll(pageable);
 		return pedidoOracaoMapper.mapEntityPageToDTO(pageable, pedidos);
 	}
+	
+	
+	public PedidoOracaoModelResponse atualizarStatusOracao(Long idPedido) {
+	   log.info("Atualiza o status da oração para {}");	
+	   return pedidoOracaoMapper.entityToDTO(null);
+	}
 }
