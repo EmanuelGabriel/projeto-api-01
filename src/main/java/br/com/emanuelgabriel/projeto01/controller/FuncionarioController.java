@@ -22,6 +22,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.emanuelgabriel.projeto01.domain.dto.request.FuncionarioModelRequest;
 import br.com.emanuelgabriel.projeto01.domain.dto.response.FuncionarioModelResponse;
+import br.com.emanuelgabriel.projeto01.domain.repository.customers.FuncionarioProjecao;
 import br.com.emanuelgabriel.projeto01.services.FuncionarioService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -93,6 +94,27 @@ public class FuncionarioController {
 			@RequestParam(value = "dataFinal") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataFinal) {
 		log.info("GET /funcionarios/periodo-data-contratacao {} a {}", dataInicial, dataFinal);
 		List<FuncionarioModelResponse> funcionarios = funcionarioService.buscarPorPeriodoDataContratacao(dataInicial, dataFinal);
+		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "maior-salario-projecao", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<FuncionarioProjecao>> buscarPorMaiorSalario() {
+		log.info("GET /funcionarios/maior-salario-projecao");
+		List<FuncionarioProjecao> funcionarios = funcionarioService.buscarFuncionarioMaiorSalario();
+		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "por-nome", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Page<FuncionarioModelResponse>> buscarFuncionarioPorNome(@RequestParam("nome") String nome) {
+		log.info("GET /funcionarios/por-nome {}", nome);
+		Page<FuncionarioModelResponse> funcionarios = funcionarioService.buscarFuncionarioPorNome(nome);
+		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
+	}
+	
+	@GetMapping(value = "salario", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Page<FuncionarioModelResponse>> buscarFuncionarioSalario(@RequestParam("salario") Double salario) {
+		log.info("GET /funcionarios/salario {}", salario);
+		Page<FuncionarioModelResponse> funcionarios = funcionarioService.buscarFuncionarioSalario(salario);
 		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
 	}
 

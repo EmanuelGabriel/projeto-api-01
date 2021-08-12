@@ -9,6 +9,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import br.com.emanuelgabriel.projeto01.domain.dto.request.FuncionarioModelRequest;
@@ -18,6 +19,8 @@ import br.com.emanuelgabriel.projeto01.domain.entity.Funcionario;
 import br.com.emanuelgabriel.projeto01.domain.mapper.FuncionarioMapper;
 import br.com.emanuelgabriel.projeto01.domain.repository.CargoRepository;
 import br.com.emanuelgabriel.projeto01.domain.repository.FuncionarioRepository;
+import br.com.emanuelgabriel.projeto01.domain.repository.customers.FuncionarioProjecao;
+import br.com.emanuelgabriel.projeto01.domain.repository.specification.FuncionarioSpecification;
 import br.com.emanuelgabriel.projeto01.services.exception.ObjNaoEncontradoException;
 import br.com.emanuelgabriel.projeto01.services.exception.RegraNegocioException;
 import lombok.extern.slf4j.Slf4j;
@@ -106,7 +109,7 @@ public class FuncionarioService {
 
 		return funcionarioMapper.listEntityToDTO(funcionarios);
 	}
-	
+
 	public List<FuncionarioModelResponse> buscarPorPeriodoDataContratacao(LocalDate dataInicio, LocalDate dataFinal) {
 		log.info("Busca funcionário por período de data de contratação inicial {} e final {}", dataInicio, dataFinal);
 		List<Funcionario> funcionarios = funcionarioRepository.findByDataContratacaoBetween(dataInicio, dataFinal);
@@ -117,4 +120,39 @@ public class FuncionarioService {
 		return funcionarioMapper.listEntityToDTO(funcionarios);
 	}
 
+	public List<FuncionarioProjecao> buscarFuncionarioMaiorSalario() {
+		log.info("Busca por funcionário que possui maior salário");
+		var funcionarios = funcionarioRepository.buscarFuncionarioMaiorSalario();
+		if (funcionarios.isEmpty()) {
+			throw new ObjNaoEncontradoException("Nenhum resultado encontratado");
+		}
+
+		return funcionarios;
+	}
+
+	public Page<FuncionarioModelResponse> buscarFuncionarioPorNome(String nome) {
+		log.info("Busca funcionário por nome {}", nome);
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
+		var pageFuncionarios = funcionarioRepository.findAll(Specification.where(FuncionarioSpecification.nome(nome)), pageable);
+		
+		if (pageFuncionarios.isEmpty()) {
+			throw new ObjNaoEncontradoException("Funcionário de nome não encontratado");
+		}
+
+		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionarios);
+
+	}
+	
+	public Page<FuncionarioModelResponse> buscarFuncionarioSalario(Double salario) {
+		log.info("Busca funcionário por salario {}", salario);
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
+		var pageFuncionarios = funcionarioRepository.findAll(Specification.where(FuncionarioSpecification.salario(salario)), pageable);
+		
+		if (pageFuncionarios.isEmpty()) {
+			throw new ObjNaoEncontradoException("Salário de Funcionário não encontratado");
+		}
+
+		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionarios);
+
+	}
 }
