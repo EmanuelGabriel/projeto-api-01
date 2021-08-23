@@ -117,6 +117,13 @@ public class FuncionarioController {
 		Page<FuncionarioModelResponse> funcionarios = funcionarioService.buscarFuncionarioSalario(salario);
 		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
 	}
+	
+	@GetMapping(value = "filtrar-por", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Page<FuncionarioModelResponse>> filtrarPor(@RequestParam(value = "nome", required = false) String nome, @RequestParam(value = "cpf", required = false) String cpf, @RequestParam(value = "salario", required = false) Double salario) {
+		log.info("GET /funcionarios/filtrar-por {}, {}, {}", nome, cpf, salario);
+		Page<FuncionarioModelResponse> funcionarios = funcionarioService.filtrarPor(nome, cpf, salario);
+		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
+	}
 
 	private URI getUri(Long id) {
 		return ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();

@@ -155,4 +155,22 @@ public class FuncionarioService {
 		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionarios);
 
 	}
+	
+	
+	public Page<FuncionarioModelResponse> filtrarPor(String nome, String cpf, Double salario){
+		log.info("Filtrar por nome: {}, CPF: {}, Salário: {}", nome, cpf, salario);
+		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
+		
+		var pageFuncionario = funcionarioRepository.findAll(Specification
+				.where(FuncionarioSpecification.nome(nome))
+				.or(Specification.where(FuncionarioSpecification.cpf(cpf)))
+				.or(Specification.where(FuncionarioSpecification.salario(salario))), pageable);
+		
+		if (pageFuncionario.isEmpty()) {
+			throw new ObjNaoEncontradoException("Nenhum resultado encontrado");
+		}
+		
+		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionario);
+	}
+	
 }

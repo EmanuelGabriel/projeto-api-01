@@ -38,6 +38,6 @@ public class FuncionarioSpecification {
 		}
 		
 		return (root, criteraQuery, criteriaBuilder) -> 
-		     criteriaBuilder.greaterThan(root.get("salario"), salario);		     
+		     criteriaBuilder.greaterThanOrEqualTo(root.get("salario"), salario);		     
 	}
 }
