@@ -167,7 +167,7 @@ public class FuncionarioService {
 				.or(Specification.where(FuncionarioSpecification.salario(salario))), pageable);
 		
 		if (pageFuncionario.isEmpty()) {
-			throw new ObjNaoEncontradoException("Nenhum resultado encontrado");
+			throw new ObjNaoEncontradoException("Nenhum resultado encontrado para esta busca");
 		}
 		
 		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionario);
