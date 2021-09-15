@@ -28,6 +28,9 @@ public class CargoController {
 
 	@Autowired
 	private CargoService cargoService;
+	
+	
+	
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping

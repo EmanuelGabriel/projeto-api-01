@@ -15,6 +15,7 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -81,6 +82,19 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 	@ExceptionHandler(RegraNegocioException.class)
 	public ResponseEntity<?> regraNegocioException(RegraNegocioException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.BAD_REQUEST;
+		TipoProblema tipoProblema = TipoProblema.ERRO_NEGOCIO;
+		String detalhe = ex.getMessage();
+
+		ProblemaResponse problema = criarProblemaBuilder(status, tipoProblema, detalhe).mensagem(detalhe).build();
+
+		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
+	
+	
+	@ExceptionHandler(HttpClientErrorException.class)
+	public ResponseEntity<?> httpClientErrorException(HttpClientErrorException ex, WebRequest request) {
 
 		HttpStatus status = HttpStatus.BAD_REQUEST;
 		TipoProblema tipoProblema = TipoProblema.ERRO_NEGOCIO;

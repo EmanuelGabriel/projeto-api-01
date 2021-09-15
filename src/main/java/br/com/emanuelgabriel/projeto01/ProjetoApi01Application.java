@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cache.annotation.EnableCaching;
 
 import br.com.emanuelgabriel.projeto01.domain.entity.Cargo;
 import br.com.emanuelgabriel.projeto01.domain.entity.Funcionario;
@@ -17,6 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @SpringBootApplication
+@EnableCaching
 public class ProjetoApi01Application implements CommandLineRunner {
 
 	@Autowired

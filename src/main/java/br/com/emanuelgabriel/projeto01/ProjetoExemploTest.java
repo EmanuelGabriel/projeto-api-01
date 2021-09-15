@@ -8,6 +8,9 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class ProjetoExemploTest {
+	
+	
+	private static final String URL_BASE_JSON_PLACEHOLDER = "https://jsonplaceholder.typicode.com/posts";
 
 	public static void main(String[] args) {
 
@@ -32,6 +35,12 @@ public class ProjetoExemploTest {
 		log.info("Filtro/Números: {}", collect2);
 		
 
+	
+		System.out.println("\n");
+		
+		
 	}
+	
+	
 
 }
