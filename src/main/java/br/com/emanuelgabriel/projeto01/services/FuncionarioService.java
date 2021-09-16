@@ -25,6 +25,12 @@ import br.com.emanuelgabriel.projeto01.services.exception.ObjNaoEncontradoExcept
 import br.com.emanuelgabriel.projeto01.services.exception.RegraNegocioException;
 import lombok.extern.slf4j.Slf4j;
 
+/**
+ * 
+ * @author emanuel.sousa
+ *
+ */
+
 @Slf4j
 @Service
 public class FuncionarioService {

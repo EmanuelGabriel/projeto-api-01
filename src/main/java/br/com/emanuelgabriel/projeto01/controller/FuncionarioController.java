@@ -28,7 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @RestController
-@RequestMapping(value = "/funcionarios", produces = MediaType.APPLICATION_JSON_VALUE)
+@RequestMapping(value = "/v1/funcionarios", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FuncionarioController {
 
 	@Autowired

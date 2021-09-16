@@ -28,8 +28,8 @@ public class PageJson {
 			// customização do Page
 			jsonGenerator.writeObjectField("itens", page.getContent()); // conteúdo
 			jsonGenerator.writeNumberField("totalPaginas", page.getTotalPages()); // total de páginas
-			jsonGenerator.writeNumberField("quantidadePorPagina", page.getSize()); // retorna o tamanho de itens do Page
-			jsonGenerator.writeObjectField("total", page.getTotalElements()); // total de elementos
+			jsonGenerator.writeNumberField("quantidadePorPagina", page.getSize()); // retorna o tamanho de itens do Page - quantidade por página
+			jsonGenerator.writeObjectField("totalElementos", page.getTotalElements()); // total de elementos
 			
 			
 			jsonGenerator.writeEndObject();
