@@ -4,8 +4,11 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -25,6 +28,12 @@ import br.com.emanuelgabriel.projeto01.domain.dto.response.FuncionarioModelRespo
 import br.com.emanuelgabriel.projeto01.domain.repository.customers.FuncionarioProjecao;
 import br.com.emanuelgabriel.projeto01.services.FuncionarioService;
 import lombok.extern.slf4j.Slf4j;
+
+/**
+ * 
+ * @author emanuel.sousa
+ *
+ */
 
 @Slf4j
 @RestController
@@ -51,7 +60,7 @@ public class FuncionarioController {
 
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
-	public ResponseEntity<FuncionarioModelResponse> criar(@RequestBody FuncionarioModelRequest request) {
+	public ResponseEntity<FuncionarioModelResponse> criar(@Valid @RequestBody FuncionarioModelRequest request) {
 		log.info("POST /funcionarios - body {}", request);
 		FuncionarioModelResponse response = this.funcionarioService.salvar(request);
 		URI location = getUri(response.getId());
@@ -59,9 +68,9 @@ public class FuncionarioController {
 	}
 
 	@GetMapping
-	public ResponseEntity<Page<FuncionarioModelResponse>> buscarTodos() {
-		log.info("GET /funcionarios");
-		Page<FuncionarioModelResponse> funcionarios = funcionarioService.buscarTodos();
+	public ResponseEntity<Page<FuncionarioModelResponse>> buscarTodos(Pageable pageable) {
+		log.info("GET /funcionarios {}", pageable);
+		Page<FuncionarioModelResponse> funcionarios = funcionarioService.buscarTodos(pageable);
 		return funcionarios != null ? ResponseEntity.ok().body(funcionarios) : ResponseEntity.ok().build();
 	}
 	

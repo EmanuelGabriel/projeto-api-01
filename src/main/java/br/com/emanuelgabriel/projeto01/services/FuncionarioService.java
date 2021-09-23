@@ -15,9 +15,11 @@ import org.springframework.stereotype.Service;
 import br.com.emanuelgabriel.projeto01.domain.dto.request.FuncionarioModelRequest;
 import br.com.emanuelgabriel.projeto01.domain.dto.response.FuncionarioModelResponse;
 import br.com.emanuelgabriel.projeto01.domain.entity.Cargo;
+import br.com.emanuelgabriel.projeto01.domain.entity.Foto;
 import br.com.emanuelgabriel.projeto01.domain.entity.Funcionario;
 import br.com.emanuelgabriel.projeto01.domain.mapper.FuncionarioMapper;
 import br.com.emanuelgabriel.projeto01.domain.repository.CargoRepository;
+import br.com.emanuelgabriel.projeto01.domain.repository.FotoRepository;
 import br.com.emanuelgabriel.projeto01.domain.repository.FuncionarioRepository;
 import br.com.emanuelgabriel.projeto01.domain.repository.customers.FuncionarioProjecao;
 import br.com.emanuelgabriel.projeto01.domain.repository.specification.FuncionarioSpecification;
@@ -43,6 +45,9 @@ public class FuncionarioService {
 
 	@Autowired
 	private CargoRepository cargoRepository;
+
+	@Autowired
+	private FotoRepository fotoRepository;
 
 	public FuncionarioModelResponse buscarPorId(Long id) {
 		log.info("Busca funcionário por ID {}", id);
@@ -72,16 +77,24 @@ public class FuncionarioService {
 		}
 
 		Optional<Cargo> cargoOpt = cargoRepository.findById(request.getCargo().getId());
+		if (!cargoOpt.isPresent()) {
+			throw new ObjNaoEncontradoException("ID do cargo não foi encontrado");
+		}
 
 		Funcionario funcionario = funcionarioMapper.dtoToEntity(request);
 		funcionario.setCargo(cargoOpt.get());
 
+		Optional<Foto> fotoOpt = fotoRepository.findById(request.getFoto().getId());
+		if (!fotoOpt.isPresent()) {
+			throw new ObjNaoEncontradoException("ID da imagem não foi encontrada");
+		}
+		funcionario.setFoto(fotoOpt.get());
+
 		return funcionarioMapper.entityToDTO(funcionarioRepository.save(funcionario));
 	}
 
-	public Page<FuncionarioModelResponse> buscarTodos() {
+	public Page<FuncionarioModelResponse> buscarTodos(Pageable pageable) {
 		log.info("Busca todos os cargos");
-		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
 		Page<Funcionario> cargos = funcionarioRepository.findAll(pageable);
 		return funcionarioMapper.mapEntityPageToDTO(pageable, cargos);
 	}
@@ -139,8 +152,9 @@ public class FuncionarioService {
 	public Page<FuncionarioModelResponse> buscarFuncionarioPorNome(String nome) {
 		log.info("Busca funcionário por nome {}", nome);
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
-		var pageFuncionarios = funcionarioRepository.findAll(Specification.where(FuncionarioSpecification.nome(nome)), pageable);
-		
+		var pageFuncionarios = funcionarioRepository.findAll(Specification.where(FuncionarioSpecification.nome(nome)),
+				pageable);
+
 		if (pageFuncionarios.isEmpty()) {
 			throw new ObjNaoEncontradoException("Funcionário de nome não encontratado");
 		}
@@ -148,12 +162,13 @@ public class FuncionarioService {
 		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionarios);
 
 	}
-	
+
 	public Page<FuncionarioModelResponse> buscarFuncionarioSalario(Double salario) {
 		log.info("Busca funcionário por salario {}", salario);
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
-		var pageFuncionarios = funcionarioRepository.findAll(Specification.where(FuncionarioSpecification.salario(salario)), pageable);
-		
+		var pageFuncionarios = funcionarioRepository
+				.findAll(Specification.where(FuncionarioSpecification.salario(salario)), pageable);
+
 		if (pageFuncionarios.isEmpty()) {
 			throw new ObjNaoEncontradoException("Salário de Funcionário não encontratado");
 		}
@@ -161,22 +176,20 @@ public class FuncionarioService {
 		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionarios);
 
 	}
-	
-	
-	public Page<FuncionarioModelResponse> filtrarPor(String nome, String cpf, Double salario){
+
+	public Page<FuncionarioModelResponse> filtrarPor(String nome, String cpf, Double salario) {
 		log.info("Filtrar por nome: {}, CPF: {}, Salário: {}", nome, cpf, salario);
 		Pageable pageable = PageRequest.of(0, 10, Sort.by("id").ascending().and(Sort.by("nome").ascending()));
-		
-		var pageFuncionario = funcionarioRepository.findAll(Specification
-				.where(FuncionarioSpecification.nome(nome))
+
+		var pageFuncionario = funcionarioRepository.findAll(Specification.where(FuncionarioSpecification.nome(nome))
 				.or(Specification.where(FuncionarioSpecification.cpf(cpf)))
 				.or(Specification.where(FuncionarioSpecification.salario(salario))), pageable);
-		
+
 		if (pageFuncionario.isEmpty()) {
 			throw new ObjNaoEncontradoException("Nenhum resultado encontrado para esta busca");
 		}
-		
+
 		return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionario);
 	}
-	
+
 }

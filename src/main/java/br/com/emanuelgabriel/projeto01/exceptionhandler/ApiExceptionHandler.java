@@ -4,9 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
@@ -91,8 +94,7 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
 	}
-	
-	
+
 	@ExceptionHandler(HttpClientErrorException.class)
 	public ResponseEntity<?> httpClientErrorException(HttpClientErrorException ex, WebRequest request) {
 
@@ -103,6 +105,45 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 		ProblemaResponse problema = criarProblemaBuilder(status, tipoProblema, detalhe).mensagem(detalhe).build();
 
 		return handleExceptionInternal(ex, problema, new HttpHeaders(), status, request);
+	}
+
+	@ExceptionHandler(DataIntegrityViolationException.class)
+	public ResponseEntity<?> dataIntegrityException(DataIntegrityViolationException ex, WebRequest request) {
+
+		HttpStatus status = HttpStatus.CONFLICT;
+		TipoProblema tipoProblema = TipoProblema.ERRO_INTEGRIDADE_DADOS;
+		String detalhe = ex.getMessage();
+
+		ProblemaResponse problema = criarProblemaBuilder(status, tipoProblema, detalhe).mensagem(detalhe).build();
+
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problema);
+	}
+
+	@Override
+	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request) {
+
+		if (ex instanceof MethodArgumentTypeMismatchException) {
+			return handleMethodArgumentTypeMismatch((MethodArgumentTypeMismatchException) ex, headers, status, request);
+		}
+
+		return super.handleTypeMismatch(ex, headers, status, request);
+	}
+
+	private ResponseEntity<Object> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex,
+			HttpHeaders headers, HttpStatus status, WebRequest request) {
+
+		TipoProblema problemType = TipoProblema.PARAMETRO_INVALIDO;
+
+		String detail = String.format(
+				"O parâmetro de URL '%s' recebeu o valor '%s', "
+						+ "que é de um tipo inválido. Corrija e informe um valor compatível com o tipo %s.",
+				ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
+
+		ProblemaResponse problema = criarProblemaBuilder(status, problemType, detail)
+				.mensagem(MSG_ERRO_GENERICA_USUARIO_FINAL).build();
+
+		return handleExceptionInternal(ex, problema, headers, status, request);
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class FuncionarioMapper {
 	/**
 	 * Responsável em converter uma entitade para dto
 	 * 
-	 * @param entitade
+	 * @param entity
 	 * @return dto
 	 */
 	public FuncionarioModelResponse entityToDTO(Funcionario funcionario) {
@@ -34,7 +34,7 @@ public class FuncionarioMapper {
 	 * Responsável por converter dto em entidade
 	 * 
 	 * @param dto
-	 * @return entidade
+	 * @return entity
 	 */
 	public Funcionario dtoToEntity(FuncionarioModelResponse dto) {
 		return this.modelMapper.map(dto, Funcionario.class);

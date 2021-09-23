@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class FotoModelResponse {
 
-	private String id;
+	private Long id;
 	private String nome;
 	private String type;
 	private long tamanho;
@@ -23,8 +23,5 @@ public class FotoModelResponse {
 
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
 	private LocalDateTime dataCadastro;
-
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-	private LocalDateTime dataAtualizacao;
 
 }
