@@ -3,6 +3,7 @@ package br.com.emanuelgabriel.projeto01.domain.repository;
 import java.time.LocalDate;
 import java.util.List;
 
+import br.com.emanuelgabriel.projeto01.domain.repository.funcionarios.FuncionarioRepositoryQuery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +13,7 @@ import br.com.emanuelgabriel.projeto01.domain.entity.Funcionario;
 import br.com.emanuelgabriel.projeto01.domain.repository.customers.FuncionarioProjecao;
 
 @Repository
-public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>, JpaSpecificationExecutor<Funcionario> {
+public interface FuncionarioRepository extends JpaRepository<Funcionario, Long>, FuncionarioRepositoryQuery, JpaSpecificationExecutor<Funcionario> {
 
 	List<Funcionario> findByNome(String nome);
 
