@@ -22,8 +22,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 
+import javax.persistence.criteria.Predicate;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -199,8 +202,47 @@ public class FuncionarioService {
     }
 
     public Page<FuncionarioModelResponse> pageFiltro(FuncionarioFiltro filtro, Pageable pageable) {
-        log.info("Filtro page: {}; Page: {}", filtro, pageable);
+        log.info("Filtro page: Filtro: {}; Page: {}", filtro, pageable);
         return funcionarioRepository.filtro(filtro, pageable);
+    }
+
+    /**
+     * Filtro
+     * @param filtro
+     * @param pageable
+     * @return Page<FuncionarioModelResponse>
+     */
+    public Page<FuncionarioModelResponse> filtrarPorFuncionario(FuncionarioFiltro filtro, Pageable pageable) {
+        log.info("Filtar por {};{}", filtro, pageable);
+
+        var pageFuncionario = funcionarioRepository.findAll((Specification<Funcionario>) (root, query, builder) -> {
+
+            List<Predicate> predicates = new ArrayList<>();
+
+            if (!ObjectUtils.isEmpty(filtro.getNome())) {
+                predicates.add(builder.like(builder.lower(root.get("nome")), "%" + filtro.getNome().toLowerCase() + "%"));
+            }
+
+            if (!ObjectUtils.isEmpty(filtro.getCpf())) {
+                predicates.add(builder.like(builder.lower(root.get("cpf")), "%" + filtro.getCpf().toLowerCase() + "%"));
+            }
+
+            if (!ObjectUtils.isEmpty(filtro.getSalario())) {
+                predicates.add(builder.equal(root.get("salario"), filtro.getSalario()));
+            }
+
+            if (!ObjectUtils.isEmpty(filtro.getDataContratacao())) {
+                predicates.add(builder.equal(root.get("dataContratacao"), filtro.getDataContratacao()));
+            }
+
+
+            return builder.and(predicates.toArray(new Predicate[0]));
+        }, pageable);
+
+        pageFuncionario.getTotalElements();
+        pageFuncionario.getTotalPages();
+
+        return funcionarioMapper.mapEntityPageToDTO(pageable, pageFuncionario);
     }
 
 }

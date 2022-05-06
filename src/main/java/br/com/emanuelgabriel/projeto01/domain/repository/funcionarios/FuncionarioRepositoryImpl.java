@@ -84,7 +84,6 @@ public class FuncionarioRepositoryImpl implements FuncionarioRepositoryQuery {
 
 
     /**
-     *
      * @param query
      * @param pageable
      */
@@ -112,8 +111,6 @@ public class FuncionarioRepositoryImpl implements FuncionarioRepositoryQuery {
         criteria.select(builder.count(root));
         return manager.createQuery(criteria).getSingleResult();
     }
-
-
 
 
 }

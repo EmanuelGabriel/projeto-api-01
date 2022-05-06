@@ -1,18 +1,19 @@
 package br.com.emanuelgabriel.projeto01.domain.dto.response;
 
-import java.time.LocalDate;
-import java.util.Date;
-
 import com.fasterxml.jackson.annotation.JsonFormat;
-
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FuncionarioModelResponse {
+public class FuncionarioModelResponse implements Serializable {
+
+	private static final long serialVersionUID = 1L;
 
 	private Long id;
 	private String nome;
@@ -26,6 +27,6 @@ public class FuncionarioModelResponse {
 	private FotoModelResponse foto;
 
 	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'")
-	private Date dataUltimaAlteracao;
+	private LocalDate dataUltimaAlteracao;
 
 }

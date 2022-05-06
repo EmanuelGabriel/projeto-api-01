@@ -1,8 +1,7 @@
 package br.com.emanuelgabriel.projeto01.domain.repository.specification;
 
-import org.springframework.data.jpa.domain.Specification;
-
 import br.com.emanuelgabriel.projeto01.domain.entity.Funcionario;
+import org.springframework.data.jpa.domain.Specification;
 
 /**
  * 
@@ -20,7 +19,7 @@ public class FuncionarioSpecification {
 		return (root, criteraQuery, criteriaBuilder) -> 
 		     criteriaBuilder.like(criteriaBuilder.lower(root.get("nome")), "%".concat(nome.toLowerCase()).concat("%"));		     
 	}
-	
+
 	public static Specification<Funcionario> cpf(String cpf){
 		
 		if (cpf == null) {

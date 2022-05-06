@@ -6,6 +6,8 @@ import br.com.emanuelgabriel.projeto01.domain.repository.customers.FuncionarioPr
 import br.com.emanuelgabriel.projeto01.domain.repository.funcionarios.FuncionarioFiltro;
 import br.com.emanuelgabriel.projeto01.services.FuncionarioService;
 import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -28,10 +30,11 @@ import java.util.List;
  */
 
 
-@Slf4j
 @RestController
 @RequestMapping(value = "/v1/funcionarios", produces = MediaType.APPLICATION_JSON_VALUE)
 public class FuncionarioController {
+
+    private static final Logger log = LoggerFactory.getLogger(FuncionarioController.class);
 
     @Autowired
     private FuncionarioService funcionarioService;
@@ -132,7 +135,7 @@ public class FuncionarioController {
             FuncionarioFiltro filtro,
             @PageableDefault(page = 0, size = 10, sort = "nome", direction = Sort.Direction.ASC) Pageable pageable) {
         log.info("GET /v1/funcionarios/filtro {};{}", filtro, pageable);
-        var pageFuncionario = funcionarioService.pageFiltro(filtro, pageable);
+        var pageFuncionario = funcionarioService.filtrarPorFuncionario(filtro, pageable); //pageFiltro(filtro, pageable);
         return pageFuncionario != null ? ResponseEntity.ok().body(pageFuncionario) : ResponseEntity.ok().build();
     }
 
